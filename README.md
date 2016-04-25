@@ -1,2 +1,2 @@
-# oryol-turbobadger
+# oryol-tbui
 Integrate TurbobadgerUI with Oryol
