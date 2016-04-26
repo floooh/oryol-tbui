@@ -7,7 +7,6 @@ imports:
         git:    https://github.com/fungos/fips-turbobadger.git
     oryol:
         git:    https://github.com/floooh/oryol.git
-        branch: tbui_cleanup
 exports:
     header-dirs:
         - src
