@@ -2,7 +2,7 @@
 
 TurboBadger-UI wrapper module for Oryol (https://github.com/fruxo/turbobadger)
 
-Oryol sample: https://floooh.gitgub.com/oryol-samples/asmjs/TurboBadgerDemo.html
+Oryol sample: https://floooh.github.com/oryol-samples/asmjs/TurboBadgerDemo.html
 
 ### How to integrate into your Oryol project:
 
