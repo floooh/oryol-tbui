@@ -11,8 +11,7 @@
 #include "TBUI/tb/tbOryolBatchRenderer.h"
 #include "TBUI/tb/tbOryolRootWidget.h"
 #include "Resource/Core/resourceRegistry.h"
-#include "Input/Core/Mouse.h"
-#include "Input/Core/Key.h"
+#include "Input/Input.h"
 #include "tb_skin.h"
 
 namespace Oryol {
@@ -41,7 +40,7 @@ private:
     /// mouse move input handler
     void onMouseMove(int posX, int posY);
     /// mouse button input handler
-    void onMouseButton(Mouse::Button btn, bool down);
+    void onMouseButton(MouseButton::Code btn, bool down);
     /// mouse scroll input handler
     void onScroll(int wheelX, int wheelY);
     /// touch-tapped
