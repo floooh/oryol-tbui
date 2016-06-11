@@ -60,7 +60,7 @@ tbMgr::Setup(const TBUISetup& setup) {
     }
 
     // input event handlers
-    Input::SubscribeInputEvents([this](const InputEvent& e) {
+    Input::SubscribeEvents([this](const InputEvent& e) {
         switch (e.Type) {
             case InputEvent::KeyDown:
             case InputEvent::KeyRepeat:
