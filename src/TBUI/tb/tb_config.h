@@ -5,8 +5,10 @@
     @brief override for TurboBadgers default tb_config.h
 */
 // this is required on PNaCl
+#if ORYOL_PNACL
 #ifdef __STRICT_ANSI__
 #undef __STRICT_ANSI__
+#endif
 #endif
 
 /** Enable for some handy runtime debugging, enabled by modifying
