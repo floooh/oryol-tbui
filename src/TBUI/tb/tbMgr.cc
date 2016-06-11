@@ -60,53 +60,41 @@ tbMgr::Setup(const TBUISetup& setup) {
     }
 
     // input event handlers
-    Input::SubscribeMouse([this](const Mouse::Event& e) {
+    Input::SubscribeInputEvents([this](const InputEvent& e) {
         switch (e.Type) {
-            case Mouse::Event::Move:
-                this->onMouseMove((int)e.Position.x, (int)e.Position.y);
-                break;
-            case Mouse::Event::ButtonDown:
-                this->onMouseButton(e.Button, true);
-                break;
-            case Mouse::Event::ButtonUp:
-                this->onMouseButton(e.Button, false);
-                break;
-            case Mouse::Event::Scroll:
-                this->onScroll((int)e.ScrollMovement.x, (int)e.ScrollMovement.y);
-                break;
-            default:
-                break;
-        }
-    });
-    Input::SubscribeKeyboard([this](const Keyboard::Event& e) {
-        switch (e.Type) {
-            case Keyboard::Event::KeyDown:
-            case Keyboard::Event::KeyRepeat:
+            case InputEvent::KeyDown:
+            case InputEvent::KeyRepeat:
                 this->onKey(e.KeyCode, true, false);
                 break;
-            case Keyboard::Event::KeyUp:
+            case InputEvent::KeyUp:
                 this->onKey(e.KeyCode, false, true);
                 break;
-            case Keyboard::Event::WChar:
+            case InputEvent::WChar:
                 this->onWChar(e.WCharCode);
                 break;
-            default:
+            case InputEvent::MouseMove:
+                this->onMouseMove((int)e.Position.x, (int)e.Position.y);
                 break;
-        }
-    });
-    Input::SubscribeTouchpad([this](const Touchpad::Event& e) {
-        switch (e.Type) {
-            case Touchpad::Event::Tapped:
-                this->onTapped(e.Position[0]);
+            case InputEvent::MouseButtonDown:
+                this->onMouseButton(e.Button, true);
                 break;
-            case Touchpad::Event::PanningStarted:
-                this->onPanningStarted(e.StartPosition[0]);
+            case InputEvent::MouseButtonUp:
+                this->onMouseButton(e.Button, false);
                 break;
-            case Touchpad::Event::Panning:
-                this->onPanning(e.Position[0]);
+            case InputEvent::MouseScrolling:
+                this->onScroll((int)e.Scrolling.x, (int)e.Scrolling.y);
                 break;
-            case Touchpad::Event::PanningEnded:
-                this->onPanningEnded(e.Position[0]);
+            case InputEvent::TouchTapped:
+                this->onTapped(e.TouchPosition[0]);
+                break;
+            case InputEvent::TouchPanningStarted:
+                this->onPanningStarted(e.TouchStartPosition[0]);
+                break;
+            case InputEvent::TouchPanning:
+                this->onPanning(e.TouchPosition[0]);
+                break;
+            case InputEvent::TouchPanningEnded:
+                this->onPanningEnded(e.TouchPosition[0]);
                 break;
             default:
                 break;
@@ -197,8 +185,8 @@ tbMgr::onMouseMove(int posX, int posY) {
 
 //-----------------------------------------------------------------------------
 void
-tbMgr::onMouseButton(Mouse::Button btn, bool down) {
-    if (btn == Mouse::LMB) {
+tbMgr::onMouseButton(MouseButton::Code btn, bool down) {
+    if (btn == MouseButton::Left) {
         if (down) {
             this->rootWidget.InvokePointerDown(this->mouseX, this->mouseY, 1, this->modifierKeys, false);
         }
@@ -206,7 +194,7 @@ tbMgr::onMouseButton(Mouse::Button btn, bool down) {
             this->rootWidget.InvokePointerUp(this->mouseX, this->mouseY, this->modifierKeys, false);
         }
     }
-    else if (btn == Mouse::RMB) {
+    else if (btn == MouseButton::Right) {
         this->rootWidget.InvokePointerMove(this->mouseX, this->mouseY, this->modifierKeys, false);
         if (TBWidget::hovered_widget)
         {
