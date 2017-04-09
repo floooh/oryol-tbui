@@ -54,7 +54,7 @@ tbOryolBitmap::createTexture(tb::uint32* data) {
     const int byteSize = this->width * this->height * sizeof(tb::uint32);
 
     this->label = Gfx::PushResourceLabel();
-    auto texSetup = TextureSetup::FromPixelData(this->width, this->height, 1, TextureType::Texture2D, PixelFormat::RGBA8);
+    auto texSetup = TextureSetup::FromPixelData2D(this->width, this->height, 1, PixelFormat::RGBA8);
     texSetup.Sampler.WrapU = TextureWrapMode::Repeat;
     texSetup.Sampler.WrapV = TextureWrapMode::Repeat;
     texSetup.Sampler.MinFilter = TextureFilterMode::Nearest;

@@ -72,7 +72,7 @@ tbOryolBatchRenderer::setupWhiteTexture() {
     uint32 pixels[w * h];
     Memory::Fill(pixels, sizeof(pixels), 0xFF);
     
-    auto texSetup = TextureSetup::FromPixelData(w, h, 1, TextureType::Texture2D, PixelFormat::RGBA8);
+    auto texSetup = TextureSetup::FromPixelData2D(w, h, 1, PixelFormat::RGBA8);
     texSetup.Sampler.WrapU = TextureWrapMode::Repeat;
     texSetup.Sampler.WrapV = TextureWrapMode::Repeat;
     texSetup.Sampler.MinFilter = TextureFilterMode::Nearest;
