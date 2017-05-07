@@ -441,8 +441,8 @@ tbOryolBatchRenderer::drawBatches() {
     // NOTE: curBatchIndex is always one-past-end
     if (this->curBatchIndex > 1) {
 
-        TBUIShader::VSParams vsParams;
-        vsParams.Ortho = glm::ortho(0.0f, float(this->screenRect.w),
+        TBUIShader::vsParams vsParams;
+        vsParams.ortho = glm::ortho(0.0f, float(this->screenRect.w),
             (float)this->screenRect.h, 0.0f,
             -1.0f, 1.0f);
         const int vertexDataSize = this->curVertexIndex * this->vertexLayout.ByteSize();
@@ -452,7 +452,7 @@ tbOryolBatchRenderer::drawBatches() {
         for (int batchIndex = 0; batchIndex < this->curBatchIndex; batchIndex++) {
             const Batch& batch = this->batches[batchIndex];
             Gfx::ApplyScissorRect(batch.clipRect.x, batch.clipRect.y, batch.clipRect.w, batch.clipRect.h);
-            this->drawState.FSTexture[TBUITextures::Texture] = batch.texture.IsValid() ? batch.texture : this->whiteTexture;
+            this->drawState.FSTexture[TBUIShader::tex] = batch.texture.IsValid() ? batch.texture : this->whiteTexture;
             Gfx::ApplyDrawState(drawState);
             Gfx::ApplyUniformBlock(vsParams);
             Gfx::Draw(PrimitiveGroup(batch.startIndex, batch.numVertices));
