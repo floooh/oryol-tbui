@@ -5,7 +5,7 @@
     @brief holds path and name of a font
 */
 #include "Core/String/StringAtom.h"
-#include "IO/Core/URL.h"
+#include "IO/IOTypes.h"
 
 namespace Oryol {
 

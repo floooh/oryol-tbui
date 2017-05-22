@@ -7,7 +7,7 @@
     @TODO: document creating new TBUIWindow subclasses.
 */
 #include "Core/Types.h"
-#include "IO/Core/URL.h"
+#include "IO/IOTypes.h"
 #include "tb_window.h"
 
 namespace Oryol {

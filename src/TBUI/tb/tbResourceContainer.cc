@@ -19,7 +19,7 @@ tbResourceContainer::setup(const TBUISetup& setup) {
     o_assert_dbg(!this->isValid());
     this->resPool.Reserve(setup.ResourcePoolSize);
     this->resPool.SetAllocStrategy(0, 0);
-    resourceContainerBase::setup(setup.ResourceLabelStackCapacity, setup.ResourceRegistryCapacity);
+    ResourceContainerBase::setup(setup.ResourceLabelStackCapacity, setup.ResourceRegistryCapacity);
 }
 
 //------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ void
 tbResourceContainer::discard() {
     o_assert_dbg(this->isValid());
     this->resPool.Clear();
-    resourceContainerBase::discard();
+    ResourceContainerBase::discard();
 }
 
 //------------------------------------------------------------------------------

@@ -5,7 +5,7 @@
     @brief setup parameters for the TBUI module
 */
 #include "Core/Types.h"
-#include "IO/Core/URL.h"
+#include "IO/IOTypes.h"
 #include "TBUI/TBUIFontInfo.h"
 
 namespace Oryol {

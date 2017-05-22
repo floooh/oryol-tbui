@@ -9,7 +9,7 @@
     all required resources into memory. The interface is similar to
     the gfxResourceContainer.
 */
-#include "Resource/Core/resourceContainerBase.h"
+#include "Resource/ResourceContainerBase.h"
 #include "Core/Containers/Array.h"
 #include "Core/Containers/Queue.h"
 #include "Core/Containers/Buffer.h"
@@ -22,7 +22,7 @@ class TBFile;
 namespace Oryol {
 namespace _priv {
 
-class tbResourceContainer : public resourceContainerBase {
+class tbResourceContainer : public ResourceContainerBase {
 public:
     /// constructor
     tbResourceContainer();

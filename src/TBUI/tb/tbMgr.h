@@ -10,7 +10,6 @@
 #include "TBUI/TBUISetup.h"
 #include "TBUI/tb/tbOryolBatchRenderer.h"
 #include "TBUI/tb/tbOryolRootWidget.h"
-#include "Resource/Core/resourceRegistry.h"
 #include "Input/Input.h"
 #include "tb_skin.h"
 
