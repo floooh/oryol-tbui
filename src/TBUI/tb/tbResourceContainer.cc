@@ -16,31 +16,31 @@ uniqueCounter(0) {
 //------------------------------------------------------------------------------
 void
 tbResourceContainer::setup(const TBUISetup& setup) {
-    o_assert_dbg(!this->isValid());
+    o_assert_dbg(!this->IsValid());
     this->resPool.Reserve(setup.ResourcePoolSize);
     this->resPool.SetAllocStrategy(0, 0);
-    ResourceContainerBase::setup(setup.ResourceLabelStackCapacity, setup.ResourceRegistryCapacity);
+    ResourceContainerBase::Setup(setup.ResourceLabelStackCapacity, setup.ResourceRegistryCapacity);
 }
 
 //------------------------------------------------------------------------------
 void
 tbResourceContainer::discard() {
-    o_assert_dbg(this->isValid());
+    o_assert_dbg(this->IsValid());
     this->resPool.Clear();
-    ResourceContainerBase::discard();
+    ResourceContainerBase::Discard();
 }
 
 //------------------------------------------------------------------------------
 void
 tbResourceContainer::add(const Locator& loc, Buffer&& data) {
-    o_assert_dbg(this->isValid());
+    o_assert_dbg(this->IsValid());
     Id id = this->registry.Lookup(loc);
     if (id.IsValid()) {
         Log::Warn("TBUIResourceContainer::Add(): resource '%s' already exists!\n", loc.Location().AsCStr());
     }
     else {
         Id newId(this->uniqueCounter++, this->resPool.Size(), 0);
-        this->registry.Add(loc, newId, this->peekLabel());
+        this->registry.Add(loc, newId, this->PeekLabel());
         this->resPool.Add(std::move(data));
     }
 }
@@ -48,7 +48,7 @@ tbResourceContainer::add(const Locator& loc, Buffer&& data) {
 //------------------------------------------------------------------------------
 Buffer*
 tbResourceContainer::lookupResource(const Locator& loc) {
-    o_assert_dbg(this->isValid());
+    o_assert_dbg(this->IsValid());
     Id id = this->registry.Lookup(loc);
     if (id.IsValid()) {
         return &(resPool[id.SlotIndex]);
