@@ -72,46 +72,51 @@ tbOryolBatchRenderer::setupWhiteTexture() {
     uint32 pixels[w * h];
     Memory::Fill(pixels, sizeof(pixels), 0xFF);
     
-    auto texSetup = TextureSetup::FromPixelData2D(w, h, 1, PixelFormat::RGBA8);
-    texSetup.Sampler.WrapU = TextureWrapMode::Repeat;
-    texSetup.Sampler.WrapV = TextureWrapMode::Repeat;
-    texSetup.Sampler.MinFilter = TextureFilterMode::Nearest;
-    texSetup.Sampler.MagFilter = TextureFilterMode::Nearest;
-    texSetup.ImageData.Sizes[0][0] = sizeof(pixels);
-    this->whiteTexture = Gfx::CreateResource(texSetup, pixels, sizeof(pixels));
+    this->whiteTexture = Gfx::CreateTexture(TextureDesc()
+        .Type(TextureType::Texture2D)
+        .Width(w)
+        .Height(h)
+        .NumMipMaps(1)
+        .Format(PixelFormat::RGBA8)
+        .WrapU(TextureWrapMode::Repeat)
+        .WrapV(TextureWrapMode::Repeat)
+        .MinFilter(TextureFilterMode::Nearest)
+        .MagFilter(TextureFilterMode::Nearest)
+        .MipSize(0, 0, sizeof(pixels))
+        .MipContent(0, 0, pixels));
 }
 
 //------------------------------------------------------------------------------
 void
 tbOryolBatchRenderer::setupResources() {
-    o_assert_dbg(!this->drawState.Mesh[0].IsValid());
+    o_assert_dbg(!this->drawState.VertexBuffers[0].IsValid());
     o_assert_dbg(!this->drawState.Pipeline.IsValid());
 
-    this->vertexLayout
-        .Add(VertexAttr::Position, VertexFormat::Float2)
-        .Add(VertexAttr::TexCoord0, VertexFormat::Float2)
-        .Add(VertexAttr::Color0, VertexFormat::UByte4N);
+    this->vertexLayout = {
+        { "position", VertexFormat::Float2 },
+        { "texcoord0", VertexFormat::Float2 },
+        { "color0", VertexFormat::UByte4N }
+    };
     o_assert(sizeof(this->vertexData) == MaxNumVertices * this->vertexLayout.ByteSize());
     
-    MeshSetup setup = MeshSetup::Empty(MaxNumVertices, Usage::Stream);
-    setup.Layout = this->vertexLayout;
-    this->drawState.Mesh[0] = Gfx::CreateResource(setup);
-    o_assert(this->drawState.Mesh[0].IsValid());
-    o_assert(Gfx::QueryResourceInfo(this->drawState.Mesh[0]).State == ResourceState::Valid);
+    this->drawState.VertexBuffers[0] = Gfx::CreateBuffer(BufferDesc()
+        .Type(BufferType::VertexBuffer)
+        .Size(sizeof(this->vertexData))
+        .Usage(Usage::Stream));
 
-    Id shd = Gfx::CreateResource(TBUIShader::Setup());
-    auto ps = PipelineSetup::FromLayoutAndShader(this->vertexLayout, shd);
-    ps.DepthStencilState.DepthWriteEnabled = false;
-    ps.DepthStencilState.DepthCmpFunc = CompareFunc::Always;
-    ps.BlendState.BlendEnabled = true;
-    ps.BlendState.SrcFactorRGB = BlendFactor::SrcAlpha;
-    ps.BlendState.DstFactorRGB = BlendFactor::OneMinusSrcAlpha;
-    ps.BlendState.ColorFormat = Gfx::DisplayAttrs().ColorPixelFormat;
-    ps.BlendState.DepthFormat = Gfx::DisplayAttrs().DepthPixelFormat;
-    ps.BlendState.ColorWriteMask = PixelChannel::RGB;
-    ps.RasterizerState.ScissorTestEnabled = true;
-    ps.RasterizerState.SampleCount = Gfx::DisplayAttrs().SampleCount;
-    this->drawState.Pipeline = Gfx::CreateResource(ps);
+    Id shd = Gfx::CreateShader(TBUIShader::Desc());
+    this->drawState.Pipeline = Gfx::CreatePipeline(PipelineDesc()
+        .Shader(shd)
+        .Layout(0, this->vertexLayout)
+        .DepthWriteEnabled(false)
+        .DepthCmpFunc(CompareFunc::Always)
+        .BlendEnabled(true)
+        .BlendSrcFactorRGB(BlendFactor::SrcAlpha)
+        .BlendDstFactorRGB(BlendFactor::OneMinusSrcAlpha)
+        .ColorWriteMask(PixelChannel::RGB)
+        .ColorFormat(Gfx::DisplayAttrs().ColorFormat)
+        .DepthFormat(Gfx::DisplayAttrs().DepthFormat)
+        .SampleCount(Gfx::DisplayAttrs().SampleCount));
 }
 
 //------------------------------------------------------------------------------
@@ -448,14 +453,14 @@ tbOryolBatchRenderer::drawBatches() {
         const int vertexDataSize = this->curVertexIndex * this->vertexLayout.ByteSize();
 
         this->tbClipRect = this->screenRect;
-        Gfx::UpdateVertices(this->drawState.Mesh[0], this->vertexData, vertexDataSize);
+        Gfx::UpdateBuffer(this->drawState.VertexBuffers[0], this->vertexData, vertexDataSize);
         for (int batchIndex = 0; batchIndex < this->curBatchIndex; batchIndex++) {
             const Batch& batch = this->batches[batchIndex];
             Gfx::ApplyScissorRect(batch.clipRect.x, batch.clipRect.y, batch.clipRect.w, batch.clipRect.h);
             this->drawState.FSTexture[TBUIShader::tex] = batch.texture.IsValid() ? batch.texture : this->whiteTexture;
             Gfx::ApplyDrawState(drawState);
             Gfx::ApplyUniformBlock(vsParams);
-            Gfx::Draw(PrimitiveGroup(batch.startIndex, batch.numVertices));
+            Gfx::Draw(batch.startIndex, batch.numVertices);
         }
         Gfx::ApplyScissorRect(this->screenRect.x, this->screenRect.y, this->screenRect.w, this->screenRect.h);
     }

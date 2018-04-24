@@ -54,14 +54,18 @@ tbOryolBitmap::createTexture(tb::uint32* data) {
     const int byteSize = this->width * this->height * sizeof(tb::uint32);
 
     this->label = Gfx::PushResourceLabel();
-    auto texSetup = TextureSetup::FromPixelData2D(this->width, this->height, 1, PixelFormat::RGBA8);
-    texSetup.Sampler.WrapU = TextureWrapMode::Repeat;
-    texSetup.Sampler.WrapV = TextureWrapMode::Repeat;
-    texSetup.Sampler.MinFilter = TextureFilterMode::Nearest;
-    texSetup.Sampler.MagFilter = TextureFilterMode::Nearest;
-    texSetup.ImageData.Sizes[0][0] = byteSize;
-    this->texture = Gfx::CreateResource(texSetup, data, byteSize);
-    
+    this->texture = Gfx::CreateTexture(TextureDesc()
+        .Type(TextureType::Texture2D)
+        .Width(this->width)
+        .Height(this->height)
+        .NumMipMaps(1)
+        .Format(PixelFormat::RGBA8)
+        .WrapU(TextureWrapMode::Repeat)
+        .WrapV(TextureWrapMode::Repeat)
+        .MinFilter(TextureFilterMode::Nearest)
+        .MagFilter(TextureFilterMode::Nearest)
+        .MipSize(0, 0, byteSize)
+        .MipContent(0, 0, data));
     Gfx::PopResourceLabel();
 }
 

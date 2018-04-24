@@ -17,7 +17,7 @@ tb::TBFile::Open(const char* filename, TBFileMode mode) {
 
     // NOTE: loaded resource will never move and never go away, so it is
     // ok to store raw pointer here
-    Oryol::Buffer* data = Oryol::TBUI::resources().lookupResource(resolvedPath.AsCStr());
+    Oryol::MemoryBuffer* data = Oryol::TBUI::resources().lookupResource(resolvedPath.AsCStr());
     if (data && !data->Empty()) {
         Oryol::_priv::tbOryolFile* obj = new Oryol::_priv::tbOryolFile();
         obj->size = data->Size();

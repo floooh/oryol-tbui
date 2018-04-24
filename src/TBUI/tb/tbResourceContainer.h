@@ -9,10 +9,10 @@
     all required resources into memory. The interface is similar to
     the gfxResourceContainer.
 */
-#include "Resource/ResourceContainerBase.h"
 #include "Core/Containers/Array.h"
-#include "Core/Containers/Queue.h"
-#include "Core/Containers/Buffer.h"
+#include "Core/Containers/MemoryBuffer.h"
+#include "Resource/ResourceRegistry.h"
+#include "Resource/ResourceLabelStack.h"
 #include "TBUI/TBUISetup.h"
 
 namespace tb {
@@ -22,7 +22,7 @@ class TBFile;
 namespace Oryol {
 namespace _priv {
 
-class tbResourceContainer : public ResourceContainerBase {
+class tbResourceContainer {
 public:
     /// constructor
     tbResourceContainer();
@@ -32,13 +32,15 @@ public:
     /// discard the resource container
     void discard();
     /// lookup resource by locator, return nullptr if not found
-    Buffer* lookupResource(const Locator& loc);
+    MemoryBuffer* lookupResource(const Locator& loc);
     /// add a resource buffer object (URL must be set!)
-    void add(const Locator& loc, Buffer&& data);
+    void add(const Locator& loc, MemoryBuffer&& data);
 
 private:
     int uniqueCounter;
-    Array<Buffer> resPool;
+    ResourceRegistry registry;
+    ResourceLabelStack labelStack;
+    Array<MemoryBuffer> resPool;
 };
 
 } // namespace _priv
