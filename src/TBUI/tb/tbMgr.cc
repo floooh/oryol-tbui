@@ -152,7 +152,7 @@ tbMgr::Draw() {
     o_assert_dbg(this->IsValid());
     o_assert_dbg(this->renderer);
 
-    const DisplayAttrs& disp = Gfx::PassAttrs();
+    const DisplayAttrs& disp = Gfx::DisplayAttrs();
     this->rootWidget.SetRect(TBRect(0, 0, disp.Width, disp.Height));
 
     TBAnimationManager::Update();
