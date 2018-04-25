@@ -4,7 +4,7 @@
 ---
 imports:
     fips-turbobadger:
-        git:    https://github.com/fungos/fips-turbobadger.git
+        git:    https://github.com/fips-libs/fips-turbobadger.git
     oryol:
         git:    https://github.com/floooh/oryol.git
 exports:
