@@ -152,12 +152,12 @@ tbMgr::Draw() {
     o_assert_dbg(this->IsValid());
     o_assert_dbg(this->renderer);
 
-    const DisplayAttrs& disp = Gfx::PassAttrs();
-    this->rootWidget.SetRect(TBRect(0, 0, disp.FramebufferWidth, disp.FramebufferHeight));
+    const DisplayAttrs& disp = Gfx::DisplayAttrs();
+    this->rootWidget.SetRect(TBRect(0, 0, disp.Width, disp.Height));
 
     TBAnimationManager::Update();
 
-    this->renderer->BeginPaint(disp.FramebufferWidth, disp.FramebufferHeight);
+    this->renderer->BeginPaint(disp.Width, disp.Height);
     this->rootWidget.InvokePaint(TBWidget::PaintProps());
     this->renderer->EndPaint();
 
